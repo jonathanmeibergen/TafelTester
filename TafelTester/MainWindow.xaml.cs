@@ -22,6 +22,8 @@ namespace TafelTester
     public partial class MainWindow : Window
     {
         private List<int> reeks = new List<int>();
+        private static Random rng = new Random();
+
         //private List<int> sommen;
         public MainWindow()
         {
@@ -51,32 +53,29 @@ namespace TafelTester
             stp.Children.Add(lbGoedFout);
 
             wpSommen.Children.Add(stp);
-
             return stp;
         }
 
 
         private void MaakSommenClick(object sender, RoutedEventArgs e)
         {
+
             //vullen
             for (int j = 0; j < 10; j++)
             {
                 reeks.Add(j + 1);
             }
-
-            Random random = new Random();
             int n = reeks.Count;
-
-            for (int i = reeks.Count - 1; i > 1; i--)
+            while (n >= 1)
             {
-                int rnd = random.Next(i + 1);
-
-                int value = reeks[rnd];
-                reeks[rnd] = reeks[i];
-                reeks[i] = value;
-                CreateSom(Convert.ToInt32(tbTafel.Text), reeks[i]);
+                n--;
+                int k = rng.Next(n + 1);
+                int value = reeks[k];
+                reeks[k] = reeks[n];
+                reeks[n] = value;
+                CreateSom(Convert.ToInt32(tbTafel.Text), reeks[n]);
             }
-        }      
+        }
     }
 }
 
