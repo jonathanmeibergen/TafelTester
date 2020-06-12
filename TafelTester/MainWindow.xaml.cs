@@ -22,16 +22,14 @@ namespace TafelTester
     public partial class MainWindow : Window
     {
         private Random rnd = new Random();
-        private List<int> reeks = new List<int>();
+        private List<int> reeksMakkelijk = new List<int>();
+        private List<int> reeksMoeilijk = new List<int>();  
+
         private List<UIElement> uieSommen = new List<UIElement>();
         public MainWindow()
         {
             InitializeComponent();
-            
-
-
         }
-
 
         private void Beoordeel_click(object sender, RoutedEventArgs e)
         {
@@ -75,7 +73,7 @@ namespace TafelTester
                     lbNotitie.Foreground = Brushes.Red;
                 }
 
-                lbResultaat.Content = score != (float)0 ? (score / (float)reeks.Count * 10.0).ToString("0.##") : 1.ToString();
+                lbResultaat.Content = score != (float)0 ? (score / (float)reeksMakkelijk.Count * 10.0).ToString("0.##") : 1.ToString();
 
             }
 
@@ -108,16 +106,16 @@ namespace TafelTester
             return stp;
         }
 
-        private void MaakSommen(object sender, RoutedEventArgs e)
+        private void MaakSommenMakkelijk_Click(object sender, RoutedEventArgs e)
         {
 
-            reeks.Clear();
+            reeksMakkelijk.Clear();
             uieSommen.Clear();
 
             //vullen
             for (int j = 0; j < 10; j++)
             {
-                reeks.Add(j + 1);
+                reeksMakkelijk.Add(j + 1);
                 if (wrpSommen.Children.Count != 0)
                 {
                     wrpSommen.Children.RemoveAt(0);
@@ -125,19 +123,60 @@ namespace TafelTester
             }
 
             //Fisher-Yates shuffle
-            for (int i = reeks.Count; i > 0; i--)
+            for (int i = reeksMakkelijk.Count; i > 0; i--)
             {
                 //take a random number
                 int k = rnd.Next(1, i);
 
                 //swap
-                int temp = reeks[k - 1];
-                reeks[k - 1] = reeks[i - 1];
-                reeks[i - 1] = temp;
+                int temp = reeksMakkelijk[k - 1];
+                reeksMakkelijk[k - 1] = reeksMakkelijk[i - 1];
+                reeksMakkelijk[i - 1] = temp;
 
                 uieSommen.Add(CreateSom(Convert.ToInt32(tbTafel.Text), temp));
             }
        
         }
+
+        private void MaakSommenMoeilijk_Click(object sender, RoutedEventArgs e)
+        {
+
+            reeksMakkelijk.Clear();
+            reeksMoeilijk.Clear();
+            uieSommen.Clear();
+
+            //vullen
+            for (int j = 0; j < 10; j++)
+            {
+                reeksMakkelijk.Add(j + 1);
+                reeksMoeilijk.Add(j + 1);
+                if (wrpSommen.Children.Count != 0)
+                {
+                    wrpSommen.Children.RemoveAt(0);
+                }
+            }
+
+            //Fisher-Yates shuffle
+            for (int i = reeksMakkelijk.Count; i > 0; i--)
+            {
+                //take a random number
+                int k = rnd.Next(1, i);
+                int n = rnd.Next(1, i);
+
+                //swap makkelijk
+                int tempMakkelijk = reeksMakkelijk[k - 1];
+                reeksMakkelijk[k - 1] = reeksMakkelijk[i - 1];
+                reeksMakkelijk[i - 1] = tempMakkelijk;
+
+                //swap moeilijk
+                int tempMoeilijk = reeksMoeilijk[n - 1];
+                reeksMoeilijk[n - 1] = reeksMoeilijk[i - 1];
+                reeksMoeilijk[i - 1] = tempMoeilijk;
+
+                uieSommen.Add(CreateSom(tempMoeilijk, tempMakkelijk));
+            }
+
+        }
+
     }
 }
