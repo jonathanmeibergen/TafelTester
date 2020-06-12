@@ -33,15 +33,35 @@ namespace TafelTester
         }
 
 
-        private void CheckAnswers(object sender, RoutedEventArgs e)
+        private void Beoordeel_click(object sender, RoutedEventArgs e)
         {
             float score = 0;
 
             foreach (StackPanel som in uieSommen)
             {
+                TextBox tbUserAnswer = som.Children[1] as TextBox;
+
+                if (tbUserAnswer.Text == "")
+                {
+                    // Configure the message box to be displayed
+                    string messageBoxText = "Niet alle sommen zijn ingevuld";
+                    string caption = "Beoordeling";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Exclamation;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+
+                    return;
+                }
+
+            }
+
+            foreach (StackPanel som in uieSommen)
+            {
                 Label lbNotitie = som.Children[2] as Label; //index 2 is 3rd item
                 TextBox tbUserAnswer = som.Children[1] as TextBox;
-                int userAnswer = tbUserAnswer.Text != "" ? Convert.ToInt32(tbUserAnswer.Text) : 0;
+
+                int userAnswer = Convert.ToInt32(tbUserAnswer.Text);
 
                 if (Convert.ToInt32(som.Tag) == userAnswer)
                 {
@@ -49,16 +69,17 @@ namespace TafelTester
                     lbNotitie.Foreground = Brushes.Green;
                     score++;
                 }
-                else 
+                else
                 {
                     lbNotitie.Content = "Fout";
                     lbNotitie.Foreground = Brushes.Red;
                 }
+
+                lbResultaat.Content = score != (float)0 ? (score / (float)reeks.Count * 10.0).ToString("0.##") : 1.ToString();
+
             }
 
-            lbResultaat.Content = score != (float)0 ? (score / (float)reeks.Count * 10.0).ToString("0.##") : 1.ToString();
-
-        }
+    }
 
         private StackPanel CreateSom(int tafel, int random)
         {
@@ -79,14 +100,13 @@ namespace TafelTester
             stp.Children.Add(tbAntwoord);
             stp.Children.Add(lbGoedFout);
 
-            //save answer
+            //save answer in panel for easy acces later
             stp.Tag = tafel * random;
 
             wrpSommen.Children.Add(stp);
 
             return stp;
         }
-
 
         private void MaakSommen(object sender, RoutedEventArgs e)
         {
@@ -104,7 +124,7 @@ namespace TafelTester
                 }
             }
 
-            //shuffle
+            //Fisher-Yates shuffle
             for (int i = reeks.Count; i > 0; i--)
             {
                 //take a random number
