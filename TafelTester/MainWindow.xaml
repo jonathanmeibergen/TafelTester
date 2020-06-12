@@ -14,10 +14,10 @@
         <TextBox x:Name="tbTafel" HorizontalAlignment="Left" Height="23" Margin="369,39,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
         <Button Content="Maak Sommen" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="121" Click="MaakSommen"/>
         <Label x:Name="lbOordeel1"  Content="" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.216,-1.068"/>
-        <Button Content="Beoordeel" HorizontalAlignment="Left" Margin="10,321,0,0" Width="75" Click="Button_Click" Height="20" VerticalAlignment="Top"/>
+        <Button Content="Beoordeel" HorizontalAlignment="Left" Margin="10,321,0,0" Width="75" Click="CheckAnswers" Height="20" VerticalAlignment="Top"/>
         <Label Content="Je resultaat is" HorizontalAlignment="Left" Margin="10,346,0,0" Height="26" VerticalAlignment="Top"/>
-        <Label x:Name="tbResultaat" Content="1" HorizontalAlignment="Left" Margin="96,346,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <WrapPanel x:Name="wpSommen" Height="182" Margin="10,134,10,0" VerticalAlignment="Top" Orientation="Vertical">
+        <Label x:Name="lbResultaat" Content="1" HorizontalAlignment="Left" Margin="96,346,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <WrapPanel x:Name="wrpSommen" Height="182" Margin="10,134,10,0" VerticalAlignment="Top" Orientation="Vertical">
 
         </WrapPanel>
     </Grid>

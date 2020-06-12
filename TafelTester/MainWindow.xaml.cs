@@ -23,7 +23,7 @@ namespace TafelTester
     {
         private Random rnd = new Random();
         private List<int> reeks = new List<int>();
-        //private List<int> sommen;
+        private List<UIElement> uieSommen = new List<UIElement>();
         public MainWindow()
         {
             InitializeComponent();
@@ -33,19 +33,44 @@ namespace TafelTester
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CheckAnswers(object sender, RoutedEventArgs e)
         {
+            float score = 0;
+
+            foreach (StackPanel som in uieSommen)
+            {
+                Label lbNotitie = som.Children[2] as Label; //index 2 is 3rd item
+                TextBox tbUserAnswer = som.Children[1] as TextBox;
+                int userAnswer = tbUserAnswer.Text != "" ? Convert.ToInt32(tbUserAnswer.Text) : 0;
+
+                if (Convert.ToInt32(som.Tag) == userAnswer)
+                {
+                    lbNotitie.Content = "Goed";
+                    lbNotitie.Foreground = Brushes.Green;
+                    score++;
+                }
+                else 
+                {
+                    lbNotitie.Content = "Fout";
+                    lbNotitie.Foreground = Brushes.Red;
+                }
+            }
+
+            lbResultaat.Content = score != (float)0 ? (score / (float)reeks.Count * 10.0).ToString("0.##") : 1.ToString();
 
         }
 
         private StackPanel CreateSom(int tafel, int random)
         {
             TextBox tbAntwoord = new TextBox();
-            tbAntwoord.Width = 150;
+            tbAntwoord.Width = 50;
             Label lbSom = new Label();
+            lbSom.Width = 60;
+            lbSom.HorizontalAlignment = HorizontalAlignment.Right;
             lbSom.Content = tafel + " x " + random;
             Label lbGoedFout = new Label();
-            lbGoedFout.Content = "Goed";
+            lbGoedFout.Width = 100;
+            lbGoedFout.Content = "";
             lbGoedFout.Visibility = Visibility.Visible;
 
             StackPanel stp = new StackPanel();
@@ -54,7 +79,10 @@ namespace TafelTester
             stp.Children.Add(tbAntwoord);
             stp.Children.Add(lbGoedFout);
 
-            wpSommen.Children.Add(stp);
+            //save answer
+            stp.Tag = tafel * random;
+
+            wrpSommen.Children.Add(stp);
 
             return stp;
         }
@@ -62,21 +90,32 @@ namespace TafelTester
 
         private void MaakSommen(object sender, RoutedEventArgs e)
         {
+
+            reeks.Clear();
+            uieSommen.Clear();
+
             //vullen
             for (int j = 0; j < 10; j++)
             {
                 reeks.Add(j + 1);
+                if (wrpSommen.Children.Count != 0)
+                {
+                    wrpSommen.Children.RemoveAt(0);
+                }
             }
 
             //shuffle
-            for (int i = 0; i < reeks.Count; i++)
+            for (int i = reeks.Count; i > 0; i--)
             {
-                int k = rnd.Next(i + 1);
-                int value = reeks[k];
-                reeks[k] = reeks[i];
-                reeks[i] = value;
+                //take a random number
+                int k = rnd.Next(1, i);
 
-                CreateSom(Convert.ToInt32(tbTafel.Text), reeks[i]);
+                //swap
+                int temp = reeks[k - 1];
+                reeks[k - 1] = reeks[i - 1];
+                reeks[i - 1] = temp;
+
+                uieSommen.Add(CreateSom(Convert.ToInt32(tbTafel.Text), temp));
             }
        
         }
